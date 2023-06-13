@@ -26,6 +26,9 @@ const client = new MongoClient(uri, {
     }
 });
 
+DB_USER=yogauser
+DB_PASS=cyVkDurI22Mx1vxR
+
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
