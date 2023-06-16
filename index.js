@@ -77,6 +77,14 @@ async function run() {
             res.send(result);
         })
 
+        app.delete('/users/admin/:id', async(req, res)=> {
+            const id = req.params.id;
+            const query = {_id: new ObjectId(id)};
+            const result = await userCollection.deleteOne(query);
+            res.send(result);
+        })
+
+
         // get all the class
         app.get('/classes', async (req, res) => {
             const result = await classCollection.find().toArray();
@@ -89,9 +97,9 @@ async function run() {
             res.send(result);
         })
 
-        // cart         
 
-        
+
+        // cart
         app.get('/carts', async (req, res) => {
             const email = req.query.email;
             if (!email) {
