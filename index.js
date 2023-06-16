@@ -4,6 +4,7 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const jwt = require('jsonwebtoken');
 
 
 // middleware 
@@ -36,26 +37,33 @@ async function run() {
         const cartCollection = client.db('yogaDB').collection('carts');
         const userCollection = client.db('yogaDB').collection('user');
 
+        // jwt 
+        app.post('/jwt', (req, res) => {
+            const user = req.body;
+            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1h'});
+            res.send({token})
+        })
+
         // user related api
-        app.get('/users', async(req, res)=>{
+        app.get('/users', async (req, res) => {
             const result = await userCollection.find().toArray();
             res.send(result);
         })
 
-        app.post('/users', async(req, res)=> {
+        app.post('/users', async (req, res) => {
             const user = req.body;
-            const query = {email: user.email};
+            const query = { email: user.email };
             const existingUser = await userCollection.findOne(query)
-            if(existingUser){
-                return res.send({message: 'User Already Exist'})
+            if (existingUser) {
+                return res.send({ message: 'User Already Exist' })
             }
             const result = await userCollection.insertOne(user);
             res.send(result);
         })
 
-        app.patch('/users/admin/:id', async(req, res)=> {
+        app.patch('/users/admin/:id', async (req, res) => {
             const id = req.params.id;
-            const filter = { _id: new ObjectId(id)};
+            const filter = { _id: new ObjectId(id) };
             const updateDoc = {
                 $set: {
                     role: 'admin'
@@ -65,9 +73,9 @@ async function run() {
             res.send(result);
         })
 
-        app.patch('/users/instructor/:id', async(req, res)=> {
+        app.patch('/users/instructor/:id', async (req, res) => {
             const id = req.params.id;
-            const filter = { _id: new ObjectId(id)};
+            const filter = { _id: new ObjectId(id) };
             const updateDoc = {
                 $set: {
                     role: 'instructor'
@@ -77,9 +85,9 @@ async function run() {
             res.send(result);
         })
 
-        app.delete('/users/admin/:id', async(req, res)=> {
+        app.delete('/users/admin/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)};
+            const query = { _id: new ObjectId(id) };
             const result = await userCollection.deleteOne(query);
             res.send(result);
         })
@@ -117,12 +125,12 @@ async function run() {
         })
 
 
-       app.delete('/carts/:id', async(req, res)=> {
-        const id = req.params.id;
-        const query = {_id: new ObjectId(id)};
-        const result = await cartCollection.deleteOne(query);
-        res.send(result);
-       })
+        app.delete('/carts/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await cartCollection.deleteOne(query);
+            res.send(result);
+        })
 
 
         // Send a ping to confirm a successful connection
