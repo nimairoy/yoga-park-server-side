@@ -1,0 +1,57 @@
+[
+    {
+      "image": "path/to/image1.jpg",
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "role": "Senior Instructor",
+      "students": 39,
+      "classes_number": 3,
+      "classes_name": ["Yoga Basics", "Vinyasa Flow", "Restorative Yoga"]
+    },
+    {
+      "image": "path/to/image2.jpg",
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "role": "Instructor",
+      "students": 38,
+      "classes_number": 2,
+      "classes_name": ["Power Yoga", "Yin Yoga"]
+    },
+    {
+      "image": "path/to/image3.jpg",
+      "name": "David Johnson",
+      "email": "david.johnson@example.com",
+      "role": "Instructor",
+      "students": 27,
+      "classes_number": 4,
+      "classes_name": ["Hatha Yoga", "Ashtanga Yoga", "Yoga for Beginners", "Meditation"]
+    },
+    {
+      "image": "path/to/image4.jpg",
+      "name": "Emily Brown",
+      "email": "emily.brown@example.com",
+      "role": "Senior Instructor",
+      "students": 36,
+      "classes_number": 1,
+      "classes_name": ["Prenatal Yoga"]
+    },
+    {
+      "image": "path/to/image5.jpg",
+      "name": "Michael Wilson",
+      "email": "michael.wilson@example.com",
+      "role": "Senior Instructor",
+      "students": 28,
+      "classes_number": 3,
+      "classes_name": ["Yoga for Athletes", "Gentle Yoga", "Yoga Nidra"]
+    },
+    {
+      "image": "path/to/image6.jpg",
+      "name": "Sarah Thompson",
+      "email": "sarah.thompson@example.com",
+      "role": "Instructor",
+      "students": 33,
+      "classes_number": 2,
+      "classes_name": ["Kundalini Yoga", "Yoga Sculpt"]
+    }
+  ]
+  

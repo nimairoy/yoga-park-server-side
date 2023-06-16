@@ -11,9 +11,6 @@ app.use(express.json());
 
 
 
-
-
-
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.as9pvg2.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -26,8 +23,7 @@ const client = new MongoClient(uri, {
     }
 });
 
-DB_USER=yogauser
-DB_PASS=cyVkDurI22Mx1vxR
+
 
 async function run() {
     try {
@@ -35,11 +31,45 @@ async function run() {
         await client.connect();
 
         const classCollection = client.db('yogaDB').collection('classes');
+        const instructorCollection = client.db('yogaDB').collection('instructor');
+        const cartCollection = client.db('yogaDB').collection('carts');
 
         // get all the class
         app.get('/classes', async (req, res) => {
             const result = await classCollection.find().toArray();
             res.send(result);
+        })
+
+        // get all the instructor
+        app.get('/instructors', async (req, res) => {
+            const result = await instructorCollection.find().toArray();
+            res.send(result);
+        })
+
+        // cart         
+        app.get('/carts', async (req, res) => {
+            const email = req.query.email;
+            if (!email) {
+                res.send([]);
+            }
+            const query = { email: email }
+            const result = await cartCollection.find(query).toArray();
+            res.send(result)
+        })
+
+
+        app.post('/carts', async (req, res) => {
+            const item = req.body;
+            const result = await cartCollection.insertOne(item);
+            res.send(result);
+        })
+
+        app.delete('/carts/:id', async (req, res) => {
+            const id = req.params.id;
+            // console.log(id)
+            const query = { _id: new ObjectId(id) }
+            const result = await cartCollection.deleteOne(query);
+            res.send(result)
         })
 
         // Send a ping to confirm a successful connection
