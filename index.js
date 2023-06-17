@@ -58,8 +58,18 @@ async function run() {
             res.send({ token })
         })
 
+        const verfiyAdmin = async (req, res, next) => {
+            const email = req.decoded.email;
+            const query = {email: email};
+            const user = await userCollection.findOne(query);
+            if(user?.role !== 'admin'){
+                return res.status(403).send({error: true, message: 'fobidden message'});
+            }
+            next();
+        }
+
         // user related api
-        app.get('/users', async (req, res) => {
+        app.get('/users', verifyJWT, verfiyAdmin, async (req, res) => {
             const result = await userCollection.find().toArray();
             res.send(result);
         })
@@ -129,9 +139,32 @@ async function run() {
         })
 
 
-        // get all the class
+        // get all the class       
+
+        app.get('/myclasses', verifyJWT,  async (req, res) => {
+            const email = req.query.email;
+            if (!email) {
+                res.send([]);
+            }
+            const decodedEmail = req.decoded.email;
+            if(decodedEmail !== email){
+                return res.status(403).send({error: true, message: 'forbidden access'})
+            }
+
+            const query = { email: email }
+            const result = await classCollection.find(query).toArray();
+            res.send(result)
+        })
+
         app.get('/classes', async (req, res) => {
             const result = await classCollection.find().toArray();
+            res.send(result);
+        })
+             
+
+        app.post('/classes', async(req, res)=> {
+            const newClass = req.body;
+            const result = await classCollection.insertOne(newClass);
             res.send(result);
         })
 
@@ -157,6 +190,13 @@ async function run() {
             const query = { email: email }
             const result = await cartCollection.find(query).toArray();
             res.send(result)
+        })
+
+        app.get('/carts/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await cartCollection.findOne(query);
+            res.send(result);
         })
 
         app.post('/carts', async (req, res) => {
